@@ -1,12 +1,54 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_cv/add_education.dart';
+import 'package:task_cv/cvscreen.dart';
+import 'package:task_cv/widget.dart';
 
-class AddExperience extends StatelessWidget {
+class AddExperience extends StatefulWidget {
+  @override
+  State<AddExperience> createState() => _AddExperienceState();
+}
+
+class _AddExperienceState extends State<AddExperience> {
   var nCompanyController = TextEditingController();
+
   var designationController = TextEditingController();
+
   var descriptionController = TextEditingController();
+
   var jobController = TextEditingController();
+
+  setAddExperience() async {
+    var pref = await SharedPreferences.getInstance();
+    var data = {
+      "nCompany": nCompanyController.text,
+      "designation": designationController.text,
+      "description": descriptionController.text,
+      "jobRole": jobController.text,
+    };
+    pref.setString('AddExperience', jsonEncode(data));
+  }
+
+  getAddExperience() async {
+    var pref = await SharedPreferences.getInstance();
+    var data = pref.getString("AddExperience");
+    if (data != null) {
+      var myData = jsonDecode(data);
+      nCompanyController.text = myData['nCompany'];
+      designationController.text = myData['designation'];
+      descriptionController.text = myData['description'];
+      jobController.text = myData['jobRole'];
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getAddExperience();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -279,10 +321,21 @@ class AddExperience extends StatelessWidget {
                         //2.
                         InkWell(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                    builder: (context) => AddEducation()));
+                            if (nCompanyController.text.isEmpty) {
+                              snack(context, 'Please Enter the Name');
+                            } else if (designationController.text.isEmpty) {
+                              snack(context, 'Please Enter the Designation');
+                            } else if (nCompanyController.text.isEmpty) {
+                              snack(context, 'Please Enter the Description');
+                            } else if (jobController.text.isEmpty) {
+                              snack(context, 'Please Enter the Job Role');
+                            } else {
+                              setAddExperience();
+                              Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                      builder: (context) => Cv()));
+                            }
                           },
                           child: Container(
                             width: 130,

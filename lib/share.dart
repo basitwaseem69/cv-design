@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
-
 class Share extends StatefulWidget {
   @override
   State<Share> createState() => _ShareState();
@@ -26,16 +24,16 @@ class _ShareState extends State<Share> {
 
 //   get()async{
 //     var sp = await SharedPreferences.getInstance();
-//     sp.getInt("count"); 
+//     sp.getInt("count");
 //     var data = sp.getInt("count");
 //     if (data != null) {
 //       c = data;
 //       setState(() {
-        
+
 //       });
 //     }
 //     print(data);
-    
+
 //   }
 
 // @override
@@ -64,44 +62,43 @@ class _ShareState extends State<Share> {
 //     if(data != null){
 //       c = data;
 //       setState(() {
-        
+
 //       });
 //       print(data);
 //     }
 //   }
 //   @override
 //   void initState() {
-    
+
 //     super.initState();
 //     get();
 //   }
 // again 2 practise sharedprefferences function.........
-var i=5;
-add()async{
-var sp = await SharedPreferences.getInstance();
-sp.setInt("click", ++i);
-get();
-}
-minus()async{
-  var sp = await SharedPreferences.getInstance();
-  sp.setInt("click", i=i-10);
-  get();
-}
-
-get()async{
-  var sp = await SharedPreferences.getInstance();
-  sp.getInt("click");
-  var data = sp.getInt("click");
-  if(data!=null){
-    i=data;
-    setState(() {
-      
-    });
+  var i = 5;
+  add() async {
+    var sp = await SharedPreferences.getInstance();
+    sp.setInt("click", ++i);
+    get();
   }
-}
-@override
+
+  minus() async {
+    var sp = await SharedPreferences.getInstance();
+    sp.setInt("click", i = i - 10);
+    get();
+  }
+
+  get() async {
+    var sp = await SharedPreferences.getInstance();
+    sp.getInt("click");
+    var data = sp.getInt("click");
+    if (data != null) {
+      i = data;
+      setState(() {});
+    }
+  }
+
+  @override
   void initState() {
-    
     super.initState();
     get();
   }
@@ -109,26 +106,40 @@ get()async{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(mainAxisAlignment: MainAxisAlignment.center,
-      
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Row(mainAxisAlignment: MainAxisAlignment.center,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(onPressed: (){
-              
-add();
-              },
-              child: Icon(Icons.add,size: 30,)),
-               SizedBox(width: 5,),
-              Text("$i",style: TextStyle(fontSize: 100,fontWeight: FontWeight.bold),),
-              SizedBox(width: 5,),
-           ElevatedButton(onPressed: (){
-              // remove();
-              minus();
-              },
-              child: Icon(Icons.remove,size: 30,)),
+              ElevatedButton(
+                  onPressed: () {
+                    add();
+                  },
+                  child: Icon(
+                    Icons.add,
+                    size: 30,
+                  )),
+              SizedBox(
+                width: 5,
+              ),
+              Text(
+                "$i",
+                style: TextStyle(fontSize: 100, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    // remove();
+                    minus();
+                  },
+                  child: Icon(
+                    Icons.remove,
+                    size: 30,
+                  )),
             ],
-
           ),
         ],
       ),

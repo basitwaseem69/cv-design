@@ -17,13 +17,18 @@ class My extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false,
+    return MaterialApp(
+      theme:ThemeData(
+        fontFamily: "fira"
+      ),
+      debugShowCheckedModeBanner: false,
       // home: Cv(),
-      // home:PersonalInfo(),
+      home:PersonalInfo(),
       // home:AddEducation() ,
       // home: Skills(),
-      // home: AddExperience(),
-      home: Share(),
+      // home: PersonalInfo(),
+      // home: Share(),
+   
     );
   }
 }

@@ -1,14 +1,62 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task_cv/cvscreen.dart';
 import 'package:task_cv/personal_info.dart';
+import 'package:task_cv/skills.dart';
+import 'package:task_cv/widget.dart';
 
-class AddEducation extends StatelessWidget {
+class AddEducation extends StatefulWidget {
+  @override
+  State<AddEducation> createState() => _AddEducationState();
+}
+
+class _AddEducationState extends State<AddEducation> {
+
   var levelController = TextEditingController();
-  var lNameController = TextEditingController();
-  var emailController = TextEditingController();
-  var phoneController = TextEditingController();
-  var roleController = TextEditingController();
 
+  var insituteController = TextEditingController();
+
+  var startingController= TextEditingController();
+
+  var endingController = TextEditingController();
+
+  var detailsController = TextEditingController();
+
+  setAddEducation() async {
+    var pref = await SharedPreferences.getInstance();
+    var data = {
+      "level": levelController.text,
+      "insitute": insituteController.text,
+      "starting": startingController.text,
+      "ending": endingController.text,
+      "details": detailsController.text,
+    };
+
+    pref.setString("AddEducation", jsonEncode(data));
+  }
+
+  getAddEducation()async{
+     var pref = await SharedPreferences.getInstance();
+     var data = pref.getString('AddEducation');
+     if(data!=null){
+      var myData=jsonDecode(data);
+      levelController.text = myData['level'];
+      insituteController.text = myData['insitute'];
+      startingController.text = myData['starting'];
+      endingController.text = myData['ending'];
+      detailsController.text = myData['details'];
+      // roleController.text = myData['role'];
+     }
+     
+  }
+      @override
+  void initState() {
+    super.initState();
+    getAddEducation();
+  }
   @override
   Widget build(BuildContext context) {
     var Size = MediaQuery.of(context).size;
@@ -85,6 +133,27 @@ class AddEducation extends StatelessWidget {
                         height: 50,
                         width: 50,
                       ),
+                       Container(
+                        height: 3,
+                        width: 50,
+                         color: Colors.black12,
+                        // color: Color(0xff6B59D3),
+                      ),
+                      // 4container...
+                      Container(
+                        child: Center(
+                            child: Text(
+                          "4",
+                          style: TextStyle(color: Colors.white, fontSize: 30),
+                        )),
+                        decoration: BoxDecoration(
+                          color: Colors.black12,
+                          // color: Color(0xff6B59D3),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        height: 50,
+                        width: 50,
+                      ),
                     ],
                   ),
                   SizedBox(
@@ -136,7 +205,7 @@ class AddEducation extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Last Name",
+                        "Insitute",
                         style: TextStyle(
                             color: Colors.black12,
                             fontWeight: FontWeight.bold,
@@ -149,7 +218,7 @@ class AddEducation extends StatelessWidget {
                         width: Size.width * .50,
                         //wrap kiya Textfeild container mai...
                         child: TextField(
-                          controller: lNameController,
+                          controller:insituteController ,
                           decoration:
                               InputDecoration(border: OutlineInputBorder()),
                         ),
@@ -164,7 +233,7 @@ class AddEducation extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Email",
+                        "Starting",
                         style: TextStyle(
                             color: Colors.black12,
                             fontWeight: FontWeight.bold,
@@ -177,7 +246,7 @@ class AddEducation extends StatelessWidget {
                         width: Size.width * .50,
                         //wrap kiya Textfeild container mai...
                         child: TextField(
-                          controller: emailController,
+                          controller: startingController,
                           decoration:
                               InputDecoration(border: OutlineInputBorder()),
                         ),
@@ -194,7 +263,7 @@ class AddEducation extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Phone No",
+                        "Ending",
                         style: TextStyle(
                             color: Colors.black12,
                             fontWeight: FontWeight.bold,
@@ -207,7 +276,7 @@ class AddEducation extends StatelessWidget {
                         width: Size.width * .50,
                         //wrap kiya Textfeild container mai...
                         child: TextField(
-                          controller: phoneController,
+                          controller: endingController,
                           decoration:
                               InputDecoration(border: OutlineInputBorder()),
                         ),
@@ -224,7 +293,7 @@ class AddEducation extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Role",
+                        "Details",
                         style: TextStyle(
                             color: Colors.black12,
                             fontWeight: FontWeight.bold,
@@ -237,7 +306,7 @@ class AddEducation extends StatelessWidget {
                         width: Size.width * .50,
                         //wrap kiya Textfeild container mai...
                         child: TextField(
-                          controller: roleController,
+                          controller: detailsController,
                           decoration:
                               InputDecoration(border: OutlineInputBorder()),
                         ),
@@ -310,11 +379,24 @@ class AddEducation extends StatelessWidget {
 
                         InkWell(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                  builder: (context) => PersonalInfo(),
-                                ));
+                            if (levelController.text.isEmpty) {
+                              snack(context, "Please Enter the Level");
+                            } else if (insituteController.text.isEmpty) {
+                              snack(context, "Please enter the Name");
+                            } else if (startingController.text.isEmpty) {
+                              snack(context, "Please enter the Email");
+                            } else if (endingController.text.isEmpty) {
+                              snack(context, "Please Enter the Phone Number");
+                            } else if (detailsController.text.isEmpty) {
+                              snack(context, "Please Enter the Role Play");
+                            } else {
+                              setAddEducation();
+                              Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                    builder: (context) => Skills(),
+                                  ));
+                            }
                           },
                           child: Container(
                             width: 130,

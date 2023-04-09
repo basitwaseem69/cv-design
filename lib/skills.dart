@@ -1,17 +1,51 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_cv/add_education.dart';
-class Skills extends StatelessWidget {
+import 'package:task_cv/add_experience.dart';
+import 'package:task_cv/widget.dart';
+
+class Skills extends StatefulWidget {
+  @override
+  State<Skills> createState() => _SkillsState();
+}
+
+class _SkillsState extends State<Skills> {
 
   var nameController = TextEditingController();
+
   var levelController = TextEditingController();
 
+  setSkills()async{
+    var pref =await SharedPreferences.getInstance();
+    var data ={
+      "name": nameController.text,
+      "level": levelController.text,
+    };
+    pref.setString("Skills", jsonEncode(data));
+  }
+  getSkills()async{
+    var pref = await SharedPreferences.getInstance();
+    var data = pref.getString("Skills");
+    if(data != null){
+      var myData = jsonDecode(data);
+      nameController.text = myData ['name'];
+      levelController.text = myData ['level'];
+    }
+  }
+  @override
+  void initState() {
+    super.initState();
+    getSkills();
+  }
   @override
   Widget build(BuildContext context) {
-    var Size=MediaQuery.of(context).size;
+    var Size = MediaQuery.of(context).size;
     return Scaffold(
-       backgroundColor: Color(0xff6B59D3),
-    body: Center(
+      backgroundColor: Color(0xff6B59D3),
+      body: Center(
         //main container....
         child: Container(
           width: Size.width * .90,
@@ -82,14 +116,14 @@ class Skills extends StatelessWidget {
                         height: 50,
                         width: 50,
                       ),
-                   //3line cont...
-                     Container(
+                      //3line cont...
+                      Container(
                         height: 3,
                         width: 50,
                         color: Color(0xff6B59D3),
                       ),
                       // 4container...
-                       Container(
+                      Container(
                         child: Center(
                             child: Text(
                           "4",
@@ -103,7 +137,6 @@ class Skills extends StatelessWidget {
                         height: 50,
                         width: 50,
                       ),
-                  
                     ],
                   ),
                   SizedBox(
@@ -136,12 +169,11 @@ class Skills extends StatelessWidget {
                       SizedBox(
                         height: 5,
                       ),
-                      
                       Container(
                         width: Size.width * .50,
                         //wrap kiya Textfeild container mai...
                         child: TextField(
-                          controller:nameController,
+                          controller: nameController,
                           decoration:
                               InputDecoration(border: OutlineInputBorder()),
                         ),
@@ -165,7 +197,6 @@ class Skills extends StatelessWidget {
                       SizedBox(
                         height: 5,
                       ),
-                      
                       Container(
                         width: Size.width * .50,
                         //wrap kiya Textfeild container mai...
@@ -194,7 +225,7 @@ class Skills extends StatelessWidget {
                   //     SizedBox(
                   //       height: 5,
                   //     ),
-                      
+
                   //     Container(
                   //       width: Size.width * .50,
                   //       //wrap kiya Textfeild container mai...
@@ -224,7 +255,7 @@ class Skills extends StatelessWidget {
                   //     SizedBox(
                   //       height: 5,
                   //     ),
-                     
+
                   //     Container(
                   //       width: Size.width * .50,
                   //       //wrap kiya Textfeild container mai...
@@ -254,7 +285,7 @@ class Skills extends StatelessWidget {
                   //     SizedBox(
                   //       height: 5,
                   //     ),
-                      
+
                   //     Container(
                   //       width: Size.width * .50,
                   //       //wrap kiya Textfeild container mai...
@@ -269,68 +300,92 @@ class Skills extends StatelessWidget {
                   SizedBox(
                     height: 30,
                   ),
-        
-              //row last button..
-              Container(
-                // color: Colors.red,
-                width: Size.width *.50,
-                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // contai butt...1...
-                  InkWell(
-                    onTap: (){
-                     
-                      Navigator.pop(context);                 
 
-                    },
-                    child: Container(
-                      width: 130,
-                      height: 50,
-                    color: Color(0xffC1C1C1),  
-                    child: Row(mainAxisAlignment: MainAxisAlignment.center,
+                  //row last button..
+                  Container(
+                    // color: Colors.red,
+                    width: Size.width * .50,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                         Icon(Icons.arrow_back,color: Colors.white,size: 15,),
-                          SizedBox(width: 5,),
-                         Text("back",style: TextStyle(color: Colors.white,fontSize: 15),),
-                 
-                 
+                        // contai butt...1...
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            width: 130,
+                            height: 50,
+                            color: Color(0xffC1C1C1),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.arrow_back,
+                                  color: Colors.white,
+                                  size: 15,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  "back",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 15),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        // contai butt...1...
+                        InkWell(
+                          onTap: () {
+                            if (nameController.text.isEmpty) {
+                              snack(context, "Please Enter the Name");
+                            } else if (levelController.text.isEmpty) {
+                              snack(context, "Please Enter the Level");
+                            } else {
+                              setSkills();
+                              Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                    builder: (context) => AddExperience(),
+                                  ));
+                            }
+                          },
+                          child: Container(
+                            width: 130,
+                            height: 50,
+                            color: Color(0xff6B59D3),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Next",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 15),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Icon(
+                                  Icons.arrow_forward,
+                                  color: Colors.white,
+                                  size: 15,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ],
-                    ),                    
-                                
                     ),
                   ),
-            // contai butt...1...
-                     InkWell(
-                    onTap: (){
-                      Navigator.push(context, CupertinoPageRoute(builder: (context) => AddEducation(),));
-
-                    },
-                    child: Container(
-                      width: 130,
-                      height: 50,
-                      color: Color(0xff6B59D3) ,
-                      child: Row(mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Next",style: TextStyle(color: Colors.white,fontSize: 15),),
-                  SizedBox(width: 5,),
-                  Icon(Icons.arrow_forward,color: Colors.white,size: 15,),
-                        ],
-                      ),
-                                
-                    ),
-                  ),
-                  ],
-                ),
-              ),
-
-              
                 ],
               ),
             ),
           ),
         ),
       ),
-   
     );
   }
 }

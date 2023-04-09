@@ -1,10 +1,76 @@
-
-
 //SAME PRACTICE ;;;;;;;;;;;;;;;;;;;
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-class Cv extends StatelessWidget {
-  const Cv({super.key});
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class Cv extends StatefulWidget {
+ 
+
+  @override
+  State<Cv> createState() => _CvState();
+}
+class _CvState extends State<Cv> {
+  
+
+  getPersonalInfo()async{
+   var pref =await SharedPreferences.getInstance();
+  var  data = pref.getString("personalInfo");
+  if(data!=null){
+    setState(() {
+    print(data);
+    var personal= jsonDecode(data);
+    personalData= personal;
+    });
+  }
+  }
+  getAddEducation()async{
+    var pref = await SharedPreferences.getInstance();
+   var data = pref.getString("AddEducation");
+   if(data != null){
+    setState(() { 
+    print(data);
+      var education = jsonDecode(data);
+      educationData = education;
+     
+    });
+   }
+  }
+  getSkills()async{
+    var pre = await SharedPreferences.getInstance();
+    var data = pre.getString("Skills");
+    if(data!=null){
+     setState(() {
+      print(data);
+        var skills = jsonDecode(data);
+      skillData= skills;
+     });
+    }
+  }
+  getAddExperience()async{
+    var pref = await SharedPreferences.getInstance();
+    var data = pref.getString("AddExperience");
+    if(data!=null){
+      setState(() {
+      print(data);
+        var experience = jsonDecode(data);
+        experienceData= experience;
+      });
+    }
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    getPersonalInfo();
+    getAddEducation();
+    getSkills();
+    getAddExperience();
+  }
+
+
+  var personalData, educationData,skillData, experienceData;
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +92,13 @@ class Cv extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Center(
+                 const   Center(
                       child: CircleAvatar(
                         radius: 90,
                         backgroundImage: AssetImage("images/bike.jpg"),
                       ),
                     ),
-                    SizedBox(
+                const    SizedBox(
                       height: 30,
                     ),
                     //1row......... kai under 2column liyay
@@ -48,7 +114,7 @@ class Cv extends StatelessWidget {
                               decoration: BoxDecoration(
                                   color: Color(0xffE7E7E9),
                                   borderRadius: BorderRadius.circular(20)),
-                              child: Icon(
+                              child:const Icon(
                                 Icons.badge_rounded,
                                 color: Colors.black,
                               ),
@@ -61,8 +127,8 @@ class Cv extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "ABOUT ME",
+                            Text("",
+                              // "${personalInfo['']}",
                               style: TextStyle(
                                   fontSize: 25,
                                   color: Colors.white,
@@ -141,7 +207,7 @@ class Cv extends StatelessWidget {
                                 Column(
                                   children: [
                                     Text(
-                                      "+ 0306 - 600 - 6559",
+                                      "${personalData['phone']}",
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     SizedBox(
@@ -175,7 +241,8 @@ class Cv extends StatelessWidget {
                                 Column(
                                   children: [
                                     Text(
-                                      "info@businessname.com",
+                                      "${personalData['email']}",
+                                      // "info@businessname.com",
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     SizedBox(
@@ -231,12 +298,12 @@ class Cv extends StatelessWidget {
                     ),
 
                     //3row....... kai under 2colum liyay.
-                    Row(crossAxisAlignment: CrossAxisAlignment.start,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         //1c..
                         Column(
-                         
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
                               height: 40,
@@ -256,10 +323,12 @@ class Cv extends StatelessWidget {
                           width: 20,
                         ),
                         //2c.....
-                        Column(crossAxisAlignment: CrossAxisAlignment.start,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               "FOLLOW ME",
+                            //  "${personalData['email']}" ,
                               style: TextStyle(
                                   fontSize: 25,
                                   color: Colors.white,
@@ -279,7 +348,8 @@ class Cv extends StatelessWidget {
                                   width: 20,
                                 ),
                                 Text(
-                                  "facebook.com/usernma",
+                                  // "facebook.com/usernma"
+                                 "${personalData['email']}" ,
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ],
@@ -298,7 +368,8 @@ class Cv extends StatelessWidget {
                                   width: 20,
                                 ),
                                 Text(
-                                  "dribble.com/usernma",
+                                  // "dribble.com/usernma"
+                                  "${personalData['phone']}",
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ],
@@ -326,14 +397,17 @@ class Cv extends StatelessWidget {
                         ),
                       ],
                     ),
-               SizedBox(height: 30,),
-               //4row... kai under 2column liyyay...
-              Row(crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //1c...
-                  Column(
-                    children: [
-                    Container(
+                    SizedBox(
+                      height: 30,
+                    ),
+                    //4row... kai under 2column liyyay...
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        //1c...
+                        Column(
+                          children: [
+                            Container(
                               height: 40,
                               width: 37,
                               decoration: BoxDecoration(
@@ -345,129 +419,146 @@ class Cv extends StatelessWidget {
                                 size: 13,
                               ),
                             ),
-                    ],
-                  ),
-                  SizedBox(width: 20,),
-               //2c....
-               Column
-               (
-               
-               crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
+                          ],
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        //2c....
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
                               "PRO SKILLS",
                               style: TextStyle(
                                   fontSize: 25,
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold),
                             ),
-                            SizedBox(height: 15,),
-             //1r               
-             Row(crossAxisAlignment: CrossAxisAlignment.start,
-              // mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(".  HTML"),SizedBox(width: 20,),
-      Row(mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment:CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 200,
-            child: LinearProgressIndicator(
-              color: Colors.orange,
-              backgroundColor: Colors.lightBlue,
-              value: 0.5,
-              minHeight: 10,
-            ),
-          ),
-        ],
-      )
-              ],
-             ),
-             //2r.
-               Row(mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(".  CSS"),SizedBox(width: 20,),
-      Row(
-        // crossAxisAlignment: MainAxisAlignment.start,
-       crossAxisAlignment:CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 200,
-            child: LinearProgressIndicator(
-              color: Colors.orange,
-              backgroundColor: Colors.lightBlue,
-              value: 0.5,
-              minHeight: 10,
-            ),
-          ),
-        ],
-      )
-              ],
-             ),
-             //3
-               Row(crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(".  JQUERY"),SizedBox(width: 20,),
-      Row(mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment:CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 200,
-            child: LinearProgressIndicator(
-              color: Colors.orange,
-              backgroundColor: Colors.lightBlue,
-              value: 0.5,
-              minHeight: 10,
-            ),
-          ),
-        ],
-      )
-              ],
-             ),
-             //4r
-               Row(crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(".  WORDPROCESSOR"),SizedBox(width: 20,),
-      Row(mainAxisAlignment: MainAxisAlignment.start,
-       crossAxisAlignment:CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 200,
-            child: LinearProgressIndicator(
-              color: Colors.orange,
-              backgroundColor: Colors.lightBlue,
-              value: 0.5,
-              minHeight: 10,
-            ),
-            
-          ),
-            
-        ],
-      )
-              ],
-             ),
-             //5
-            //  Row(
-            //   children: [
-            //     Text(".  JUMLA"),
-            //     Container(
-            //       width: 250,
-            //       child: LinearProgressIndicator(
-            //         backgroundColor: Colors.pink,
-            //         color: Colors.greenAccent,
-            //         value: .3,
-            //         minHeight:10 ,
-            //       ),
-            //     ),
-            //   ],
-            //  ),
-
-             
-                ],
-               ),
-               
-                ],
-              ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            //1r
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              // mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(" ${skillData['name']}"),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 200,
+                                      child: LinearProgressIndicator(
+                                        color: Colors.orange,
+                                        backgroundColor: Colors.lightBlue,
+                                        value: double.parse("${skillData["level"]}")/ 100,
+                                        minHeight: 10,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                            //2r.
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(".  CSS"),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Row(
+                                  // crossAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 200,
+                                      child: LinearProgressIndicator(
+                                        color: Colors.orange,
+                                        backgroundColor: Colors.lightBlue,
+                                        value: 0.5,
+                                        minHeight: 10,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                            //3
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(".  JQUERY"),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 200,
+                                      child: LinearProgressIndicator(
+                                        color: Colors.orange,
+                                        backgroundColor: Colors.lightBlue,
+                                        value: 0.5,
+                                        minHeight: 10,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                            //4r
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Text(".  WORDPROCESSOR"),
+                                Text("${skillData['level']}"),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 200,
+                                      child: LinearProgressIndicator(
+                                        color: Colors.orange,
+                                        backgroundColor: Colors.lightBlue,
+                                        value: 0.5,
+                                        minHeight: 10,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                            //5
+                            //  Row(
+                            //   children: [
+                            //     Text(".  JUMLA"),
+                            //     Container(
+                            //       width: 250,
+                            //       child: LinearProgressIndicator(
+                            //         backgroundColor: Colors.pink,
+                            //         color: Colors.greenAccent,
+                            //         value: .3,
+                            //         minHeight:10 ,
+                            //       ),
+                            //     ),
+                            //   ],
+                            //  ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ), //1main columnn endd..........
@@ -489,7 +580,7 @@ class Cv extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "ANDERSON SMITH",
+                          "${personalData['fName']}",
                           style: TextStyle(
                               fontSize: 40,
                               fontWeight: FontWeight.bold,
@@ -528,7 +619,8 @@ class Cv extends StatelessWidget {
                         width: 10,
                       ),
                       Text(
-                        "job experiences".toUpperCase(),
+                        // "job experiences".toUpperCase(),
+                        "${experienceData['jobRole']}",
                         style: TextStyle(
                             fontSize: 30,
                             color: Colors.black,
@@ -536,74 +628,77 @@ class Cv extends StatelessWidget {
                       ),
                     ],
                   ),
-                 
-                  SizedBox(
-                    height: 30,
-                  ),
-                  //1row.... kai under 2column...
-                for(int i=0; i <3;i++)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom:30),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      // mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        //1c
-                        Column(crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                              Text(
-                          ".",
-                          style: TextStyle(
-                              fontSize: 30,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w900),
-                        ),
-                          ],
-                        ),//1c
-                        SizedBox(width: 30,),
-                       //2c
-                       Column(crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                        //1r
-                        Row(mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                      Text(
-                          "Acme Corporation",
-                          style: TextStyle(
-                              fontSize: 25,
-                              color: Colors.blue,
-                              fontWeight: FontWeight.w300),
-                        ),
-                         SizedBox(
-                          width: 10,
-                        ),
-                        
-                        Text(
-                          "Jan 2000 - Feb 2003",
-                          style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
-                        ),
-                          ],
-                        ),
-                     Text("gfgfgfg etrtrtrrtrtr rtrrreereret ttrtrtrtrtrt gertrtrtrtrtrtrttr gfgfgrt rtrtrtrtr rtrtrt \nfeere erererere erererererr ererererer rtrtrtirtrttr rtrtffdf drdrer ererer\ngrtrtrtrt rtrtrtr fsdwewerre ")
-                        ],
-                       ),
-                        // SizedBox(
-                        //   width: 33,
-                        // ),
-                        
-                       
-                      ],
-                    ),
-                  ),
 
                   SizedBox(
                     height: 30,
                   ),
-                 
-                 //
+                  //1row.... kai under 2column...
+                  for (int i = 0; i < 3; i++)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 30),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        // mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          //1c
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                ".",
+                                style: TextStyle(
+                                    fontSize: 30,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w900),
+                              ),
+                            ],
+                          ), //1c
+                          SizedBox(
+                            width: 30,
+                          ),
+                          //2c
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              //1r
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${experienceData['description']}",
+                                    style: TextStyle(
+                                        fontSize: 25,
+                                        color: Colors.blue,
+                                        fontWeight: FontWeight.w300),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    "Jan 2000 - Feb 2003",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                  "gfgfgfg etrtrtrrtrtr rtrrreereret ttrtrtrtrtrt gertrtrtrtrtrtrttr gfgfgrt rtrtrtrtr rtrtrt \nfeere erererere erererererr ererererer rtrtrtirtrttr rtrtffdf drdrer ererer\ngrtrtrtrt rtrtrtr fsdwewerre ")
+                            ],
+                          ),
+                          // SizedBox(
+                          //   width: 33,
+                          // ),
+                        ],
+                      ),
+                    ),
+
+                  SizedBox(
+                    height: 30,
+                  ),
+
+                  //
                   Row(
                     children: [
                       Container(
@@ -629,71 +724,76 @@ class Cv extends StatelessWidget {
                       ),
                     ],
                   ),
-                 
+
                   SizedBox(
                     height: 30,
                   ),
                   //2row..kai under 2 columnn...
-                for(int i=0; i <3;i++)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom:30),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      // mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        //1c
-                        Column(crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                              Text(
-                          ".",
-                          style: TextStyle(
-                              fontSize: 30,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w900),
-                        ),
-                          ],
-                        ),//1c
-                        SizedBox(width: 30,),
-                       //2c
-                       Column(crossAxisAlignment: CrossAxisAlignment.start,
+                  for (int i = 0; i < 3; i++)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 30),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        // mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                        //1r
-                        Row(mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                      Text(
-                          "National University of Electro Chemical",
-                          style: TextStyle(
-                              fontSize: 25,
-                              color: Colors.blue,
-                              fontWeight: FontWeight.w300),
-                        ),
-                         SizedBox(
-                          width: 10,
-                        ),
-                        
-                        Text(
-                          "Jan 2000 - Feb 2003",
-                          style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
-                        ),
-                          ],
-                        ),
-                     Text("gfgfgfg etrtrtrrtrtr rtrrreereret ttrtrtrtrtrt gertrtrtrtrtrtrttr gfgfgrt rtrtrtrtr rtrtrt \nfeere erererere erererererr ererererer rtrtrtirtrttr rtrtffdf drdrer ererer\ngrtrtrtrt rtrtrtr fsdwewerre ")
+                          //1c
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                ".",
+                                style: TextStyle(
+                                    fontSize: 30,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w900),
+                              ),
+                            ],
+                          ), //1c
+                          SizedBox(
+                            width: 30,
+                          ),
+                          //2c
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              //1r
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${educationData['lName']}",
+                                    style: TextStyle(
+                                        fontSize: 25,
+                                        color: Colors.blue,
+                                        fontWeight: FontWeight.w300),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    "Jan 2000 - Feb 2003",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                  "gfgfgfg etrtrtrrtrtr rtrrreereret ttrtrtrtrtrt gertrtrtrtrtrtrttr gfgfgrt rtrtrtrtr rtrtrt \nfeere erererere erererererr ererererer rtrtrtirtrttr rtrtffdf drdrer ererer\ngrtrtrtrt rtrtrtr fsdwewerre ")
+                            ],
+                          ),
+                          // SizedBox(
+                          //   width: 33,
+                          // ),
                         ],
-                       ),
-                        // SizedBox(
-                        //   width: 33,
-                        // ),
-                        
-                       
-                      ],
+                      ),
                     ),
+                  SizedBox(
+                    height: 30,
                   ),
-             SizedBox(height: 30,),
-               //
-                 Row(
+                  //
+                  Row(
                     children: [
                       Container(
                         height: 40,
@@ -718,65 +818,67 @@ class Cv extends StatelessWidget {
                       ),
                     ],
                   ),
-                 //3row ..kai under 2column....
-   for(int i=0; i <3;i++)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom:30),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      // mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        //1c
-                        Column(crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                              Text(
-                          ".",
-                          style: TextStyle(
-                              fontSize: 30,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w900),
-                        ),
-                          ],
-                        ),//1c
-                        SizedBox(width: 30,),
-                       //2c
-                       Column(crossAxisAlignment: CrossAxisAlignment.start,
+                  //3row ..kai under 2column....
+                  for (int i = 0; i < 3; i++)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 30),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        // mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                        //1r
-                        Row(mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                      Text(
-                          "Reference",
-                          style: TextStyle(
-                              fontSize: 25,
-                              color: Colors.blue,
-                              fontWeight: FontWeight.w300),
-                        ),
-                         SizedBox(
-                          width: 10,
-                        ),
-                        
-                        Text(
-                          "Jan 2000 - Feb 2003",
-                          style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
-                        ),
-                          ],
-                        ),
-                     Text("gfgfgfg etrtrtrrtrtr rtrrreereret ttrtrtrtrtrt gertrtrtrtrtrtrttr gfgfgrt rtrtrtrtr rtrtrt \nfeere erererere erererererr ererererer rtrtrtirtrttr rtrtffdf drdrer ererer\ngrtrtrtrt rtrtrtr fsdwewerre ")
+                          //1c
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                ".",
+                                style: TextStyle(
+                                    fontSize: 30,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w900),
+                              ),
+                            ],
+                          ), //1c
+                          SizedBox(
+                            width: 30,
+                          ),
+                          //2c
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              //1r
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Reference",
+                                    style: TextStyle(
+                                        fontSize: 25,
+                                        color: Colors.blue,
+                                        fontWeight: FontWeight.w300),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    "Jan 2000 - Feb 2003",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                  "gfgfgfg etrtrtrrtrtr rtrrreereret ttrtrtrtrtrt gertrtrtrtrtrtrttr gfgfgrt rtrtrtrtr rtrtrt \nfeere erererere erererererr ererererer rtrtrtirtrttr rtrtffdf drdrer ererer\ngrtrtrtrt rtrtrtr fsdwewerre ")
+                            ],
+                          ),
+                          // SizedBox(
+                          //   width: 33,
+                          // ),
                         ],
-                       ),
-                        // SizedBox(
-                        //   width: 33,
-                        // ),
-                        
-                       
-                      ],
+                      ),
                     ),
-                  ),
-             
                 ],
               ),
             ), //2main column.............
@@ -786,12 +888,12 @@ class Cv extends StatelessWidget {
     );
   }
 }
-   // Container(
-                    //   width: 100,
-                    //   child: LinearProgressIndicator(
+// Container(
+//   width: 100,
+//   child: LinearProgressIndicator(
 
-                    //     backgroundColor: Colors.white,
-                    //     value: 0.4,
-                    //     minHeight: 10,
-                    //     color:Color(0xff216885),
-                    //   )
+//     backgroundColor: Colors.white,
+//     value: 0.4,
+//     minHeight: 10,
+//     color:Color(0xff216885),
+//   )
