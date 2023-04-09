@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:task_cv/cvscreen.dart';
-import 'package:task_cv/personal_info.dart';
-import 'package:task_cv/skills.dart';
-import 'package:task_cv/widget.dart';
+import 'package:cv/cvscreen.dart';
+import 'package:cv/personal_info.dart';
+import 'package:cv/skills.dart';
+import 'package:cv/widget.dart';
 
 class AddEducation extends StatefulWidget {
   @override
@@ -14,12 +14,11 @@ class AddEducation extends StatefulWidget {
 }
 
 class _AddEducationState extends State<AddEducation> {
-
   var levelController = TextEditingController();
 
   var insituteController = TextEditingController();
 
-  var startingController= TextEditingController();
+  var startingController = TextEditingController();
 
   var endingController = TextEditingController();
 
@@ -27,40 +26,70 @@ class _AddEducationState extends State<AddEducation> {
 
   setAddEducation() async {
     var pref = await SharedPreferences.getInstance();
-    var data = {
-      "level": levelController.text,
-      "insitute": insituteController.text,
-      "starting": startingController.text,
-      "ending": endingController.text,
-      "details": detailsController.text,
-    };
 
-    pref.setString("AddEducation", jsonEncode(data));
+
+    pref.setString("AddEducation", jsonEncode(selectedData));
   }
 
-  getAddEducation()async{
-     var pref = await SharedPreferences.getInstance();
-     var data = pref.getString('AddEducation');
-     if(data!=null){
-      var myData=jsonDecode(data);
+  getAddEducation() async {
+    var pref = await SharedPreferences.getInstance();
+    var data = pref.getString('AddEducation');
+    if (data != null) {
+      var myData = jsonDecode(data);
       levelController.text = myData['level'];
       insituteController.text = myData['insitute'];
       startingController.text = myData['starting'];
       endingController.text = myData['ending'];
       detailsController.text = myData['details'];
       // roleController.text = myData['role'];
-     }
-     
+    }
   }
-      @override
+
+  @override
   void initState() {
     super.initState();
-    getAddEducation();
+    // getAddEducation();
   }
+
+  List selectedData = [];
+
   @override
   Widget build(BuildContext context) {
     var Size = MediaQuery.of(context).size;
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          if (levelController.text.isEmpty) {
+            snack(context, "Please Enter the Level");
+          } else if (insituteController.text.isEmpty) {
+            snack(context, "Please enter the Name");
+          } else if (startingController.text.isEmpty) {
+            snack(context, "Please enter the Email");
+          } else if (endingController.text.isEmpty) {
+            snack(context, "Please Enter the Phone Number");
+          } else if (detailsController.text.isEmpty) {
+            snack(context, "Please Enter the Role Play");
+          } else {
+            setState(() {
+              var data = {
+                "level": levelController.text,
+                "insitute": insituteController.text,
+                "starting": startingController.text,
+                "ending": endingController.text,
+                "details": detailsController.text,
+              };
+              selectedData.add(data);
+
+              levelController.clear();
+              insituteController.clear();
+              startingController.clear();
+              endingController.clear();
+              detailsController.clear();
+            });
+          }
+        },
+      ),
       backgroundColor: Color(0xff6B59D3),
       body: Center(
         //main container....
@@ -133,10 +162,10 @@ class _AddEducationState extends State<AddEducation> {
                         height: 50,
                         width: 50,
                       ),
-                       Container(
+                      Container(
                         height: 3,
                         width: 50,
-                         color: Colors.black12,
+                        color: Colors.black12,
                         // color: Color(0xff6B59D3),
                       ),
                       // 4container...
@@ -218,7 +247,7 @@ class _AddEducationState extends State<AddEducation> {
                         width: Size.width * .50,
                         //wrap kiya Textfeild container mai...
                         child: TextField(
-                          controller:insituteController ,
+                          controller: insituteController,
                           decoration:
                               InputDecoration(border: OutlineInputBorder()),
                         ),
@@ -379,23 +408,15 @@ class _AddEducationState extends State<AddEducation> {
 
                         InkWell(
                           onTap: () {
-                            if (levelController.text.isEmpty) {
-                              snack(context, "Please Enter the Level");
-                            } else if (insituteController.text.isEmpty) {
-                              snack(context, "Please enter the Name");
-                            } else if (startingController.text.isEmpty) {
-                              snack(context, "Please enter the Email");
-                            } else if (endingController.text.isEmpty) {
-                              snack(context, "Please Enter the Phone Number");
-                            } else if (detailsController.text.isEmpty) {
-                              snack(context, "Please Enter the Role Play");
-                            } else {
+                            if (selectedData.isNotEmpty) {
                               setAddEducation();
                               Navigator.push(
                                   context,
                                   CupertinoPageRoute(
                                     builder: (context) => Skills(),
                                   ));
+                            } else {
+                              snack(context, "Please! Add Education");
                             }
                           },
                           child: Container(
@@ -425,6 +446,45 @@ class _AddEducationState extends State<AddEducation> {
                       ],
                     ),
                   ),
+                  // Data Table
+                  Text("${selectedData.length}"),
+                  DataTable(
+                      headingTextStyle:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      columns: [
+                        DataColumn(label: Text("Level")),
+                        DataColumn(label: Text("Institute")),
+                        DataColumn(label: Text("Starting")),
+                        DataColumn(label: Text("Ending")),
+                        DataColumn(label: Text("Remove"))
+                      ],
+                      rows: [
+                        // for(var item in selectedData )
+                        for (int i = 0; i < selectedData.length; i++)
+                          DataRow(cells: [
+                            DataCell(
+                              Text("${selectedData[i]["level"]}"),
+                            ),
+                            DataCell(
+                              Text("${selectedData[i]["insitute"]}"),
+                            ),
+                            DataCell(
+                              Text("${selectedData[i]["starting"]}"),
+                            ),
+                            DataCell(
+                              Text("${selectedData[i]["ending"]}"),
+                            ),
+                            DataCell(IconButton(
+                                onPressed: () {
+                                  selectedData.removeAt(i);
+                                  setState(() {});
+                                },
+                                icon: Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                )))
+                          ]),
+                      ])
                 ],
               ),
             ),
