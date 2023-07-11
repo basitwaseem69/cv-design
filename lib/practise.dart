@@ -28,7 +28,7 @@ class _PractiseState extends State<Practise> {
           Column(
             // mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: [Container(color: Colors.amber,),
               Text(
                 "Level",
                 style: TextStyle(

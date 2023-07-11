@@ -47,20 +47,6 @@ class _Practise1State extends State<Practise1> {
             children: [
               Text(
                 "Email",
-
-
-
-
-
-
-
-
-
-
-
-
-
-                
                 style: TextStyle(
                     color: Colors.black12,
                     fontWeight: FontWeight.bold,
