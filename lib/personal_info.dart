@@ -33,7 +33,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
 
   setPersonalInfoDetails() async {
     var sp = await SharedPreferences.getInstance();
-    var data = {
+    var data= {
       "fName": fNameController.text,
       "lName": lNameController.text,
       "email": emailController.text,
@@ -171,7 +171,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                     child: Text(
                       "PERSONAL INFO",
                       style: TextStyle(
-                        fontFamily: 'fira',
+                        // fontFamily: 'fira',
                           color: Colors.black,
                           fontSize: 30,
                           fontWeight: FontWeight.bold),
@@ -445,6 +445,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
           ),
         ),
       ),
+   
     );
   }
 }

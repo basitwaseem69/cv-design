@@ -23,13 +23,8 @@ class _AddExperienceState extends State<AddExperience> {
 
   setAddExperience() async {
     var pref = await SharedPreferences.getInstance();
-    var data = {
-      "nCompany": nCompanyController.text,
-      "designation": designationController.text,
-      "description": descriptionController.text,
-      "jobRole": jobController.text,
-    };
-    pref.setString('AddExperience', jsonEncode(data));
+
+    pref.setString('AddExperience', jsonEncode(selecetedData));
   }
 
   getAddExperience() async {
@@ -50,11 +45,37 @@ class _AddExperienceState extends State<AddExperience> {
     getAddExperience();
   }
 
+  List selecetedData = [];
+
   @override
   Widget build(BuildContext context) {
     var Size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Color(0xff6B59D3),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          if (nCompanyController.text.isEmpty) {
+            snack(context, 'Please Enter the Name');
+          } else if (designationController.text.isEmpty) {
+            snack(context, 'Please Enter the Designation');
+          } else if (nCompanyController.text.isEmpty) {
+            snack(context, 'Please Enter the Description');
+          } else if (jobController.text.isEmpty) {
+            snack(context, 'Please Enter the Job Role');
+          } else {
+            setState(() {
+              var data = {
+                "nCompany": nCompanyController.text,
+                "designation": designationController.text,
+                "description": descriptionController.text,
+                "jobRole": jobController.text,
+              };
+              selecetedData.add(data);
+            });
+          }
+        },
+        child: Icon(Icons.add),
+      ),
       body: Center(
         //main container....
         child: Container(
@@ -321,14 +342,8 @@ class _AddExperienceState extends State<AddExperience> {
                         //2.
                         InkWell(
                           onTap: () {
-                            if (nCompanyController.text.isEmpty) {
-                              snack(context, 'Please Enter the Name');
-                            } else if (designationController.text.isEmpty) {
-                              snack(context, 'Please Enter the Designation');
-                            } else if (nCompanyController.text.isEmpty) {
-                              snack(context, 'Please Enter the Description');
-                            } else if (jobController.text.isEmpty) {
-                              snack(context, 'Please Enter the Job Role');
+                            if (selecetedData.isEmpty) {
+                              snack(context, 'Please Enter Data');
                             } else {
                               setAddExperience();
                               Navigator.push(
@@ -358,6 +373,34 @@ class _AddExperienceState extends State<AddExperience> {
                       ],
                     ),
                   ),
+
+                  DataTable(columns: [
+                    DataColumn(label: Text("Company")),
+                    DataColumn(label: Text("Designation")),
+                    DataColumn(label: Text("Description")),
+                    DataColumn(label: Text("Role")),
+                    DataColumn(label: Text("Remove")),
+                  ], rows: [
+                    // for(var item in selecetedData)
+                    for (int i = 0; i < selecetedData.length; i++)
+                      DataRow(cells: [
+                        DataCell(
+                          Text("${selecetedData[i]["nCompany"]}"),
+                        ),
+                        DataCell(Text("${selecetedData[i]["designation"]}")),
+                        DataCell(Text(selecetedData[i]["description"])),
+                        DataCell(Text(selecetedData[i]["jobRole"])),
+                        DataCell(IconButton(
+                            onPressed: () {
+                              selecetedData.removeAt(i);
+                              setState(() {});
+                            },
+                            icon: Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            )))
+                      ])
+                  ])
                 ],
               ),
             ),

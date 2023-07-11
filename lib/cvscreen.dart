@@ -729,7 +729,7 @@ class _CvState extends State<Cv> {
                     height: 30,
                   ),
                   //2row..kai under 2 columnn...
-                  for (int i = 0; i < 3; i++)
+                  for (int i = 0; i < educationData.length; i++)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 30),
                       child: Row(
@@ -885,6 +885,7 @@ class _CvState extends State<Cv> {
           ),
         ],
       ),
+        
     );
   }
 }

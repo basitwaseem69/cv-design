@@ -102,6 +102,9 @@ class _ShareState extends State<Share> {
     super.initState();
     get();
   }
+  
+ 
+
 
   @override
   Widget build(BuildContext context) {
@@ -143,6 +146,7 @@ class _ShareState extends State<Share> {
           ),
         ],
       ),
+   
     );
   }
 }

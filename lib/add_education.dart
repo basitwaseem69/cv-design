@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:cv/cvscreen.dart';
-import 'package:cv/personal_info.dart';
-import 'package:cv/skills.dart';
-import 'package:cv/widget.dart';
+import 'package:task_cv/cvscreen.dart';
+import 'package:task_cv/personal_info.dart';
+import 'package:task_cv/skills.dart';
+import 'package:task_cv/widget.dart';
 
 class AddEducation extends StatefulWidget {
   @override
@@ -14,6 +14,7 @@ class AddEducation extends StatefulWidget {
 }
 
 class _AddEducationState extends State<AddEducation> {
+  
   var levelController = TextEditingController();
 
   var insituteController = TextEditingController();
@@ -26,9 +27,8 @@ class _AddEducationState extends State<AddEducation> {
 
   setAddEducation() async {
     var pref = await SharedPreferences.getInstance();
-
-
-    pref.setString("AddEducation", jsonEncode(selectedData));
+    
+    pref.setString("AddEducation", jsonEncode(selecetedData));
   }
 
   getAddEducation() async {
@@ -48,15 +48,16 @@ class _AddEducationState extends State<AddEducation> {
   @override
   void initState() {
     super.initState();
-    // getAddEducation();
+    getAddEducation();
   }
 
-  List selectedData = [];
+  List selecetedData = [];
 
   @override
   Widget build(BuildContext context) {
     var Size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Color(0xff6B59D3),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
@@ -71,26 +72,23 @@ class _AddEducationState extends State<AddEducation> {
           } else if (detailsController.text.isEmpty) {
             snack(context, "Please Enter the Role Play");
           } else {
-            setState(() {
-              var data = {
-                "level": levelController.text,
-                "insitute": insituteController.text,
-                "starting": startingController.text,
-                "ending": endingController.text,
-                "details": detailsController.text,
-              };
-              selectedData.add(data);
-
-              levelController.clear();
-              insituteController.clear();
-              startingController.clear();
-              endingController.clear();
-              detailsController.clear();
-            });
+            var data = {
+              "level": levelController.text,
+              "insitute": insituteController.text,
+              "starting": startingController.text,
+              "ending": endingController.text,
+              "details": detailsController.text,
+            };
+            selecetedData.add(data);
+            // levelController.clear();
+            // insituteController.clear();
+            // startingController.clear();
+            // endingController.clear();
+            // detailsController.clear();
+            setState(() {});
           }
         },
       ),
-      backgroundColor: Color(0xff6B59D3),
       body: Center(
         //main container....
         child: Container(
@@ -408,15 +406,24 @@ class _AddEducationState extends State<AddEducation> {
 
                         InkWell(
                           onTap: () {
-                            if (selectedData.isNotEmpty) {
-                              setAddEducation();
-                              Navigator.push(
-                                  context,
-                                  CupertinoPageRoute(
-                                    builder: (context) => Skills(),
-                                  ));
-                            } else {
-                              snack(context, "Please! Add Education");
+                            if (levelController.text.isEmpty) {
+                              snack(context, "Please Enter the Level");
+                            } else if (insituteController.text.isEmpty) {
+                              snack(context, "Please enter the Name");
+                            } else if (startingController.text.isEmpty) {
+                              snack(context, "Please enter the Email");
+                            } else if (endingController.text.isEmpty) {
+                              snack(context, "Please Enter the Phone Number");
+                            } else if (detailsController.text.isEmpty) {
+                              snack(context, "Please Enter the Role Play");
+                            }
+                             else {
+                            setAddEducation();
+                            Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                  builder: (context) => Skills(),
+                                ));
                             }
                           },
                           child: Container(
@@ -446,45 +453,41 @@ class _AddEducationState extends State<AddEducation> {
                       ],
                     ),
                   ),
-                  // Data Table
-                  Text("${selectedData.length}"),
+                 
+               
                   DataTable(
-                      headingTextStyle:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      headingTextStyle: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25,
+                      ),
                       columns: [
                         DataColumn(label: Text("Level")),
-                        DataColumn(label: Text("Institute")),
+                        DataColumn(label: Text("Insitute")),
                         DataColumn(label: Text("Starting")),
                         DataColumn(label: Text("Ending")),
-                        DataColumn(label: Text("Remove"))
+                        DataColumn(label: Text("Details")),
+                        DataColumn(label: Text("Remove")),
                       ],
                       rows: [
-                        // for(var item in selectedData )
-                        for (int i = 0; i < selectedData.length; i++)
+                        for (int i = 0; i < selecetedData.length; i++)
                           DataRow(cells: [
-                            DataCell(
-                              Text("${selectedData[i]["level"]}"),
-                            ),
-                            DataCell(
-                              Text("${selectedData[i]["insitute"]}"),
-                            ),
-                            DataCell(
-                              Text("${selectedData[i]["starting"]}"),
-                            ),
-                            DataCell(
-                              Text("${selectedData[i]["ending"]}"),
-                            ),
+                            DataCell(Text("${selecetedData[i]["level"]}")),
+                            DataCell(Text("${selecetedData[i]["insitute"]}")),
+                            DataCell(Text("${selecetedData[i]["starting"]}")),
+                            DataCell(Text("${selecetedData[i]["ending"]}")),
+                            DataCell(Text("${selecetedData[i]["details"]}")),
                             DataCell(IconButton(
-                                onPressed: () {
-                                  selectedData.removeAt(i);
-                                  setState(() {});
-                                },
-                                icon: Icon(
-                                  Icons.delete,
-                                  color: Colors.red,
-                                )))
+                              onPressed: () {
+                                selecetedData.removeAt(i);
+                                setState(() {
+                                  
+                                });
+
+                              },
+                              icon: Icon(Icons.delete, color: Colors.red),
+                            )),
                           ]),
-                      ])
+                      ]),
                 ],
               ),
             ),

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "395683120524",
+    "project_id": "cvdesign-d9f32",
+    "storage_bucket": "cvdesign-d9f32.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:395683120524:android:89e17a0aeb8170e3b802a9",
+        "android_client_info": {
+          "package_name": "com.example.task_cv"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "395683120524-hj5h7k47shu84t46pbt6hir6pdt5va8p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4QPKWIYx719lnYZvPjYg48rWZRhTTGco"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "395683120524-hj5h7k47shu84t46pbt6hir6pdt5va8p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
